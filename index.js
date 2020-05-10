@@ -43,12 +43,12 @@ function createTwit(event) {
     //establishes the parts of the twit as variables.
     //Based on the HTML, we can determine the structure of the twit
     var twit = document.createElement('article'); //the outermost layer of the twit
-    var bullhorn = document.createElement('i'); //i indicates icon
     var twitIcon = document.createElement('div');
-    var twitMessage = document.createElement('p');
-    var author = document.createElement('a');
-    var attribution = document.createElement('p');
+    var bullhorn = document.createElement('i'); //i indicates icon
     var twitContent = document.createElement('div');
+    var twitMessage = document.createElement('p');
+    var authorLink = document.createElement('a');
+    var author = document.createElement('p');
     var body = document.getElementsByClassName('twit-container')[0];
     //This block of code below essentially defines the parts of the twit from inner to outermost.
     //defines the bullhorn variable 
@@ -62,15 +62,15 @@ function createTwit(event) {
     twitMessage.classList.add('twit-icon');
     twitMessage.textContent = twitText.value;
     //sets author to whatever is typed
-    author.href = '#';
-    author.textContent = twitAuthor.value;
+    authorLink.href = '#';
+    authorLink.textContent = twitAuthor.value;
+    author.classList.add('twit-author');
+    author.appendChild(authorLink);
     //sets the attribution as the author
-    attribution.classList.add('twit-attribution');
-    attribution.appendChild(author);
     //the message and the attribution (NOT THE AUTHOR) make up the twit content
     twitContent.classList.add("twit-content");
     twitContent.appendChild(twitMessage);
-    twitContent.appendChild(attribution);
+    twitContent.appendChild(author);
     //the twit itself contains the icon and the contents of the twit
     twit.classList.add('twit');
     twit.appendChild(twitIcon);
@@ -86,7 +86,7 @@ function createTwit(event) {
 function search(event) {
     var twits = document.getElementsByClassName('twit');
     var i = 0;
-    for (i = 0; i < twits.length; i++) {
+    for (i = 0; i < 8; i++) {
         if ((twits[i].childNodes[3].childNodes[1].textContent.includes(searchInput.value)) || (twits[i].childNodes[3].childNodes[3].textContent.includes(searchInput.value))) {
             twits[i].classList.remove('hidden');
             continue;
@@ -96,7 +96,10 @@ function search(event) {
         }
     }
     /* This if else logic is necessary for non-default twits (aka the ones the users add).
-    Without this logic, any twits added to the page by the user would be included in the live search no matter what because they are structured differently. It has the sane functionality as the first for loop, where it checks the search input against the text and the author, but because they are in different locations for user-added twits, we need to rewrite the statement. */
+    Without this logic, any twits added to the page by the user would be included in the live search no matter what because they are structured differently. 
+    It has the sane functionality as the first for loop, where it checks the search input against the text and the author, but because they are in different locations for user-added twits, 
+    we need to rewrite the statement. In this case, the the first child (0) of twit is the icon itself which we ignore. The second child (1) refers to the contents, which then contains two additional
+    children. Those two being the text and the author.*/
     if (twits.length > 8) {
         for (i = 8; i < twits.length; i++) {
             if ((twits[i].childNodes[1].childNodes[0].textContent.includes(searchInput.value)) || (twits[i].childNodes[1].childNodes[1].textContent.includes(searchInput.value))) {
@@ -113,6 +116,3 @@ function search(event) {
 createTwitButton.addEventListener('click', modalShow);
 modalCancelButton.addEventListener('click', modalHide);
 modalCloseButton.addEventListener('click', modalHide);
-modalAcceptButton.addEventListener('click', createTwit);
-searchButton.addEventListener('click', search);
-searchInput.addEventListener('keyup', search);
