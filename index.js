@@ -59,7 +59,7 @@ function createTwit(event) {
     twitIcon.appendChild(bullhorn);
 
     //tacks twit icon onto the message and sets the value typed
-    twitMessage.classList.add('twit-icon');
+    twitMessage.classList.add('twit-text');
     twitMessage.textContent = twitText.value;
     //sets author to whatever is typed
     authorLink.href = '#';
@@ -97,9 +97,9 @@ function search(event) {
     }
     /* This if else logic is necessary for non-default twits (aka the ones the users add).
     Without this logic, any twits added to the page by the user would be included in the live search no matter what because they are structured differently. 
-    It has the sane functionality as the first for loop, where it checks the search input against the text and the author, but because they are in different locations for user-added twits, 
-    we need to rewrite the statement. In this case, the the first child (0) of twit is the icon itself which we ignore. The second child (1) refers to the contents, which then contains two additional
-    children. Those two being the text and the author.*/
+    It has the sane functionality as the first for loop, where it checks the search input against the text and the author, but because they are in different locations 
+    for user-added twits, we need to rewrite the statement. The [1] refers to the second child of the twit itself. In this case, it is the content. The second layer [1].[x] refers to which part of the
+    content. In this case, it is the text and the author.*/
     if (twits.length > 8) {
         for (i = 8; i < twits.length; i++) {
             if ((twits[i].childNodes[1].childNodes[0].textContent.includes(searchInput.value)) || (twits[i].childNodes[1].childNodes[1].textContent.includes(searchInput.value))) {
@@ -113,6 +113,10 @@ function search(event) {
     }
 }
 
+
 createTwitButton.addEventListener('click', modalShow);
 modalCancelButton.addEventListener('click', modalHide);
 modalCloseButton.addEventListener('click', modalHide);
+modalAcceptButton.addEventListener('click', createTwit);
+searchButton.addEventListener('click', search);
+searchInput.addEventListener('keyup', search);
